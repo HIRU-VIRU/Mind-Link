@@ -355,8 +355,10 @@ Return ONLY JSON:
     // Only whitelist the absolute top most-visited sites globally to avoid unnecessary AI calls
     // This is a performance optimization for the most common sites
     const topGlobalSites = [
-      // Search & Social
-      'google.com', 'youtube.com', 'facebook.com', 'instagram.com',
+      // Search & Social (Google properties included)
+      'google.com', 'google.co.uk', 'google.ca', 'google.de', 'google.fr',
+      'google.co.in', 'google.com.au', 'youtube.com', 'gmail.com',
+      'facebook.com', 'instagram.com',
       'twitter.com', 'x.com', 'reddit.com', 'linkedin.com', 'tiktok.com',
       'pinterest.com', 'tumblr.com', 'snapchat.com',
 
@@ -399,8 +401,13 @@ Return ONLY JSON:
     }
 
     // Fast-path for top global sites (no AI call needed)
-    if (topGlobalSites.some(d => location.hostname.includes(d))) {
-      console.log(`[Mind-Link] Skipping analysis - top global site: ${location.hostname}`);
+    // Check if hostname matches or is a subdomain of any whitelisted site
+    const isWhitelisted = topGlobalSites.some(domain => {
+      return location.hostname === domain || location.hostname.endsWith('.' + domain);
+    });
+
+    if (isWhitelisted) {
+      console.log(`[Mind-Link] ✅ Skipping analysis - whitelisted trusted site: ${location.hostname}`);
       return;
     }
 
@@ -654,7 +661,7 @@ Return ONLY JSON:
       // Store trust score in chrome.storage for popup access
       const storageKey = `trustScore_${pageData.hostname}`;
       await chrome.storage.local.set({ [storageKey]: finalTrustScore });
-      
+
       // Track threats blocked statistics
       if (finalTrustScore <= 2) {
         const threatsKey = 'totalThreatsBlocked';
@@ -662,7 +669,7 @@ Return ONLY JSON:
         const currentCount = threatsData[threatsKey] || 0;
         await chrome.storage.local.set({ [threatsKey]: currentCount + 1 });
       }
-      
+
       console.log("[Mind-Link] Trust score stored:", finalTrustScore);
 
       if (finalTrustScore <= 3) {

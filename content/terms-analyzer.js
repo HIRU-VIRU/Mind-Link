@@ -9,6 +9,17 @@
         return;
     }
 
+    // ========================================================================
+    // UTILITY: Extension Context Validator
+    // ========================================================================
+    function isExtensionContextValid() {
+        try {
+            return chrome.runtime?.id !== undefined;
+        } catch (e) {
+            return false;
+        }
+    }
+
     // Cache analyzed terms to avoid re-analysis
     const analyzedTerms = new Set();
     const CACHE_KEY = 'mind-link-terms-cache';
@@ -50,9 +61,19 @@
     // Save cache to storage
     function saveCache() {
         try {
+            // Check if extension context is still valid
+            if (!isExtensionContextValid()) {
+                console.log('[Mind-Link Terms Analyzer] Extension context invalidated, skipping cache save');
+                return;
+            }
             chrome.storage.local.set({ [CACHE_KEY]: termsCache });
         } catch (error) {
-            console.error('[Mind-Link Terms Analyzer] Cache save error:', error);
+            // Silently fail if extension was reloaded
+            if (error.message?.includes('Extension context invalidated')) {
+                console.log('[Mind-Link Terms Analyzer] Extension reloaded, cache save skipped');
+            } else {
+                console.error('[Mind-Link Terms Analyzer] Cache save error:', error);
+            }
         }
     }
 
@@ -67,10 +88,11 @@
         // T&C Detection Keywords
         const tcKeywords = [
             'terms of service', 'terms and conditions', 'user agreement',
-            'privacy policy', 'acceptable use', 'service agreement',
+            'privacy policy', 'privacy-policies', 'privacy statement', 'acceptable use', 'service agreement',
             'license agreement', 'refund policy', 'cancellation policy',
             'end user license', 'eula', 'legal notice', 'disclaimer',
-            'terms of use', 'subscriber agreement', 'membership agreement'
+            'terms of use', 'subscriber agreement', 'membership agreement',
+            'site-policy', 'data protection', 'cookie policy'
         ];
 
         // Payment/Subscription Detection Keywords  
@@ -197,7 +219,7 @@
         button.className = 'mind-link-analyze-btn';
         button.style.cssText = `
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
             z-index: 2147483646;
             padding: 12px 20px;
@@ -396,10 +418,40 @@
     // Show analysis results - unified function for both cached and new analysis
     function showAnalysisResults(summary, simplified, findings, severity, pageType, pricingFindings = [], privacyFindings = []) {
         console.log('[Mind-Link Terms Analyzer] Showing analysis results');
+        console.log('[Mind-Link Terms Analyzer] Results data:', {
+            findingsCount: findings?.length || 0,
+            pricingCount: pricingFindings?.length || 0,
+            privacyCount: privacyFindings?.length || 0,
+            severity,
+            pageType
+        });
 
-        // Create and show warning banner (for high severity only)
-        if (severity >= 3 && findings && findings.length > 0) {
-            const banner = createWarningBanner(findings, severity, pageType);
+        // Show warning banner if ANY findings exist (pricing or privacy)
+        const hasPricingFindings = pricingFindings && pricingFindings.length > 0;
+        const hasPrivacyFindings = privacyFindings && privacyFindings.length > 0;
+        const hasAnyFindings = hasPricingFindings || hasPrivacyFindings || (findings && findings.length > 0);
+
+        console.log('[Mind-Link Terms Analyzer] Banner decision:', {
+            hasPricingFindings,
+            hasPrivacyFindings,
+            hasAnyFindings
+        });
+
+        if (hasAnyFindings) {
+            // Combine pricing and privacy findings for the banner
+            let combinedFindings = [];
+            if (hasPricingFindings) {
+                combinedFindings.push(...pricingFindings.map(f => f.startsWith('💰') ? f : `💰 ${f}`));
+            }
+            if (hasPrivacyFindings) {
+                combinedFindings.push(...privacyFindings.map(f => f.startsWith('🔒') ? f : `🔒 ${f}`));
+            }
+            // Fallback to combined findings if separate ones aren't available
+            if (combinedFindings.length === 0 && findings && findings.length > 0) {
+                combinedFindings = findings;
+            }
+
+            const banner = createWarningBanner(combinedFindings, severity, pageType);
 
             // Add details button handler
             const detailsBtn = document.getElementById('mind-link-terms-details');
@@ -408,9 +460,6 @@
                     showDetailedAnalysis(summary, simplified, findings, severity, pageType, pricingFindings, privacyFindings);
                 });
             }
-        } else {
-            // Low severity - directly show detailed modal
-            showDetailedAnalysis(summary, simplified, findings, severity, pageType, pricingFindings, privacyFindings);
         }
     }
 
@@ -533,15 +582,24 @@
             setTimeout(() => banner.remove(), 300);
         });
 
-        // Auto-dismiss after 15 seconds for low severity
+        // Auto-dismiss after 20 seconds for low severity, 30 seconds for medium
         if (severity < 3) {
             setTimeout(() => {
                 if (document.getElementById(bannerId)) {
                     banner.style.animation = 'slideIn 0.3s ease-out reverse';
                     setTimeout(() => banner.remove(), 300);
                 }
-            }, 15000);
+            }, 20000);
+        } else if (severity === 3) {
+            // Medium severity - auto-dismiss after 30 seconds
+            setTimeout(() => {
+                if (document.getElementById(bannerId)) {
+                    banner.style.animation = 'slideIn 0.3s ease-out reverse';
+                    setTimeout(() => banner.remove(), 300);
+                }
+            }, 30000);
         }
+        // High severity (>= 4) stays until manually dismissed
 
         return banner;
     }
@@ -600,14 +658,14 @@
             f = f.split('.')[0].split(',')[0];
             if (f.length > 60) f = f.substring(0, 57) + '...';
             return f;
-        }).slice(0, 4);
+        }); // Removed .slice(0, 4) to show all findings
 
         const shortPrivacyFindings = (privacyFindings || []).map(f => {
             f = f.replace(/^🔒\s*/g, '').trim(); // Remove icon prefix
             f = f.split('.')[0].split(',')[0];
             if (f.length > 60) f = f.substring(0, 57) + '...';
             return f;
-        }).slice(0, 4);
+        }); // Removed .slice(0, 4) to show all findings
 
         // Fallback to combined findings if dual findings not available (backward compatibility)
         const shortFindings = findings.map(f => {
@@ -618,9 +676,24 @@
             f = f.split('.')[0].split(',')[0];
             if (f.length > 60) f = f.substring(0, 57) + '...';
             return f;
-        }).slice(0, 4);
+        }); // Removed .slice(0, 4) to show all findings
 
         content.innerHTML = `
+      <style>
+        .findings-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .findings-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .findings-scroll::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 3px;
+        }
+        .findings-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.5);
+        }
+      </style>
       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
         <span style="font-size: 32px;">${icon}</span>
         <h2 style="margin: 0; color: ${titleColor}; font-size: 22px;">${modalTitle}</h2>
@@ -646,31 +719,31 @@
 
       <div class="tab-content" data-tab="risks" style="display: block;">
         ${hasPricing ? `
-        <div style="background: ${severity >= 4 ? '#fef2f2' : '#fef3c7'}; border-left: 4px solid ${titleColor}; padding: 16px 18px; border-radius: 8px; margin-bottom: 16px;">
+        <div style="background: ${severity >= 4 ? '#fef2f2' : '#fef3c7'}; border-left: 4px solid ${titleColor}; padding: 16px 18px; border-radius: 8px; margin-bottom: 16px; display: flex; flex-direction: column; align-items: flex-start;">
           <h3 style="margin: 0 0 12px 0; color: ${severity >= 4 ? '#991b1b' : '#92400e'}; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
             <span>💰</span> ${pageType === 'payment' ? 'Pricing Concerns:' : 'Hidden Fees & Traps:'}
           </h3>
-          <div style="color: ${severity >= 4 ? '#7f1d1d' : '#78350f'}; line-height: 1.8; font-size: 14px; max-height: 200px; overflow-y: auto;">
+          <div class="findings-scroll" style="color: ${severity >= 4 ? '#7f1d1d' : '#78350f'}; line-height: 1.8; font-size: 14px; max-height: 200px; overflow-y: auto; padding-right: 8px; scrollbar-width: thin; scrollbar-color: ${severity >= 4 ? '#f87171' : '#fbbf24'} transparent; width: 100%;">
             ${shortPricingFindings.map(f => `• ${f}`).join('<br>')}
           </div>
         </div>
         ` : ''}
         
         ${hasPrivacy ? `
-        <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 16px 18px; border-radius: 8px;">
+        <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 16px 18px; border-radius: 8px; display: flex; flex-direction: column; align-items: flex-start;">
           <h3 style="margin: 0 0 12px 0; color: #991b1b; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
             <span>🔒</span> Privacy & Data Concerns:
           </h3>
-          <div style="color: #7f1d1d; line-height: 1.8; font-size: 14px; max-height: 200px; overflow-y: auto;">
+          <div class="findings-scroll" style="color: #7f1d1d; line-height: 1.8; font-size: 14px; max-height: 200px; overflow-y: auto; padding-right: 8px; scrollbar-width: thin; scrollbar-color: #f87171 transparent; width: 100%;">
             ${shortPrivacyFindings.map(f => `• ${f}`).join('<br>')}
           </div>
         </div>
         ` : ''}
         
         ${!hasPricing && !hasPrivacy ? `
-        <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 16px 18px; border-radius: 8px;">
+        <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 16px 18px; border-radius: 8px; display: flex; flex-direction: column; align-items: flex-start;">
           <h3 style="margin: 0 0 12px 0; color: #15803d; font-size: 15px; font-weight: 600;">No Major Concerns:</h3>
-          <div style="color: #166534; line-height: 1.8; font-size: 14px;">
+          <div class="findings-scroll" style="color: #166534; line-height: 1.8; font-size: 14px; max-height: 200px; overflow-y: auto; padding-right: 8px; scrollbar-width: thin; scrollbar-color: #22c55e transparent; width: 100%;">
             ${shortFindings.length > 0 ? shortFindings.map(f => `• ${f}`).join('<br>') : '• Terms appear reasonable'}
           </div>
         </div>
@@ -678,12 +751,12 @@
       </div>
 
       <div class="tab-content" data-tab="simple" style="display: none;">
-        <div style="background: #ecfdf5; padding: 16px 18px; border-radius: 8px; border: 1px solid #a7f3d0; max-height: 300px; overflow-y: auto;">
+        <div style="background: #ecfdf5; padding: 16px 18px; border-radius: 8px; border: 1px solid #a7f3d0; max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start;">
           <h3 style="margin: 0 0 12px 0; color: #065f46; font-size: 15px; font-weight: 600;">Simplified:</h3>
-          <div style="color: #065f46; line-height: 1.7; font-size: 14px; white-space: pre-wrap;">
+          <div style="color: #065f46; line-height: 1.7; font-size: 14px; white-space: pre-wrap; width: 100%; text-align: left;">
             ${simplified.replace(/##/g, '').replace(/\*\*/g, '').trim()}
           </div>
-          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #a7f3d0; font-size: 12px; color: #047857;">
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #a7f3d0; font-size: 12px; color: #047857; width: 100%; text-align: left;">
             ✨ Rewriter API - Simplified for easy understanding
           </div>
         </div>
@@ -801,6 +874,13 @@
 
     async function analyzeTerms(termsText, sourceUrl, pageType = 'terms') {
         console.log('[Mind-Link Terms Analyzer] Starting analysis for', pageType, 'page...');
+
+        // Early check: Validate extension context before starting
+        if (!isExtensionContextValid()) {
+            console.log('[Mind-Link Terms Analyzer] Extension context invalidated, cannot analyze');
+            showNotification('⚠️ Extension was reloaded. Please refresh the page.', 'warning');
+            return;
+        }
 
         try {
             const cleanedText = cleanTermsText(termsText);
@@ -986,6 +1066,51 @@ Analyze now:`;
             };
             saveCache();
 
+            // Also save to popup-accessible storage
+            // Check if extension context is still valid before storage operations
+            if (!isExtensionContextValid()) {
+                console.log('[Mind-Link Terms Analyzer] Extension context invalidated, skipping popup storage');
+                // Still show results to user even if we can't save
+                showAnalysisResults(
+                    summary,
+                    simplified,
+                    allFindings,
+                    analysis.overallSeverity,
+                    pageType,
+                    analysis.pricingFindings,
+                    analysis.privacyFindings
+                );
+                return;
+            }
+
+            const hostname = new URL(window.location.href).hostname;
+            const popupKey = `termsAnalysis_${hostname}`;
+
+            try {
+                chrome.storage.local.set({
+                    [popupKey]: {
+                        timestamp: Date.now(),
+                        summary,
+                        simplified,
+                        findings: allFindings,
+                        pricingFindings: analysis.pricingFindings,
+                        privacyFindings: analysis.privacyFindings,
+                        severity: analysis.overallSeverity,
+                        pricingSeverity: analysis.pricingSeverity,
+                        privacySeverity: analysis.privacySeverity,
+                        pageType: pageType,
+                        url: window.location.href
+                    }
+                });
+            } catch (storageError) {
+                // Non-critical - just log and continue
+                if (storageError.message?.includes('Extension context invalidated')) {
+                    console.log('[Mind-Link Terms Analyzer] Extension reloaded during save, results still shown');
+                } else {
+                    console.warn('[Mind-Link Terms Analyzer] Storage save failed:', storageError);
+                }
+            }
+
             // Show results
             showAnalysisResults(
                 summary,
@@ -1009,8 +1134,8 @@ Analyze now:`;
     function initialize() {
         console.log('[Mind-Link Terms Analyzer] Initializing...');
 
-        // Always create the button
-        createAnalysisButton();
+        // Button creation disabled - Using in-page warning banner instead
+        // createAnalysisButton();
 
         // Detect page type
         const pageDetection = detectPageType();
@@ -1022,32 +1147,50 @@ Analyze now:`;
         const cacheKey = window.location.href;
         if (termsCache[cacheKey]) {
             console.log('[Mind-Link Terms Analyzer] Found cached analysis');
-            updateButtonState(BUTTON_STATES.READY);
+            const cached = termsCache[cacheKey];
+            // Show the analysis results (banner + modal access)
+            showAnalysisResults(
+                cached.summary,
+                cached.simplified,
+                cached.findings,
+                cached.severity,
+                cached.pageType,
+                cached.pricingFindings || [],
+                cached.privacyFindings || []
+            );
             return;
         }
 
         // Run automatic analysis if T&C or payment page detected
-        if (currentPageType !== 'other' && pageDetection.confidence >= 3) {
+        if (currentPageType !== 'other' && pageDetection.confidence >= 2) {
             console.log('[Mind-Link Terms Analyzer] Auto-analyzing', currentPageType, 'page...');
 
-            // Run analysis in background
-            const mainContent = document.querySelector('main, article, [role="main"], .content, #content') || document.body;
-            const termsText = mainContent.textContent;
+            // Wait for API to be ready before starting analysis
+            const waitForAPI = () => {
+                if (window.__notesio_api && window.__notesio_summarizerAvailable) {
+                    console.log('[Mind-Link Terms Analyzer] API ready, starting analysis...');
 
-            // Mark as analyzing
-            analyzedTerms.add(window.location.href);
+                    // Run analysis in background
+                    const mainContent = document.querySelector('main, article, [role="main"], .content, #content') || document.body;
+                    const termsText = mainContent.textContent;
 
-            // Run analysis (will cache results)
-            analyzeTerms(termsText, window.location.href, currentPageType).then(() => {
-                // Update button to show results are ready
-                updateButtonState(BUTTON_STATES.READY);
-            }).catch(error => {
-                console.error('[Mind-Link Terms Analyzer] Auto-analysis failed:', error);
-                updateButtonState(BUTTON_STATES.ANALYZE);
-            });
-        } else {
-            // Not a T&C/payment page, keep button in default state
-            updateButtonState(BUTTON_STATES.ANALYZE);
+                    // Mark as analyzing
+                    analyzedTerms.add(window.location.href);
+
+                    // Run analysis (will cache results)
+                    analyzeTerms(termsText, window.location.href, currentPageType).then(() => {
+                        // Analysis complete - warning banner will be shown if needed
+                        console.log('[Mind-Link Terms Analyzer] Analysis complete');
+                    }).catch(error => {
+                        console.error('[Mind-Link Terms Analyzer] Auto-analysis failed:', error);
+                    });
+                } else {
+                    console.log('[Mind-Link Terms Analyzer] Waiting for API initialization...');
+                    setTimeout(waitForAPI, 100);
+                }
+            };
+
+            waitForAPI();
         }
     }
 
@@ -1057,6 +1200,89 @@ Analyze now:`;
     } else {
         initialize();
     }
+
+    // ========================================================================
+    // FEATURE 6: Dynamic Navigation Support (for SPAs like GitHub)
+    // ========================================================================
+    let lastUrl = window.location.href;
+
+    // Monitor URL changes for single-page applications
+    const urlObserver = new MutationObserver(() => {
+        const currentUrl = window.location.href;
+        if (currentUrl !== lastUrl) {
+            console.log('[Mind-Link Terms Analyzer] URL changed:', lastUrl, '->', currentUrl);
+            lastUrl = currentUrl;
+
+            // Wait for content to load (500ms delay for dynamic content)
+            setTimeout(() => {
+                // Remove old warning banner if exists
+                const oldBanner = document.getElementById('mind-link-tc-warning');
+                if (oldBanner) {
+                    oldBanner.remove();
+                }
+
+                // Re-initialize on new page
+                initialize();
+            }, 500);
+        }
+    });
+
+    // Start observing only when document.body is available
+    function startUrlObserver() {
+        if (document.body) {
+            urlObserver.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            console.log('[Mind-Link Terms Analyzer] URL observer started');
+        } else {
+            // Retry after a short delay if body not ready
+            setTimeout(startUrlObserver, 100);
+        }
+    }
+
+    // Start the observer
+    startUrlObserver();
+
+    // Also listen to popstate events (browser back/forward)
+    window.addEventListener('popstate', () => {
+        console.log('[Mind-Link Terms Analyzer] Navigation detected (popstate)');
+        setTimeout(() => {
+            const oldBanner = document.getElementById('mind-link-tc-warning');
+            if (oldBanner) {
+                oldBanner.remove();
+            }
+            initialize();
+        }, 500);
+    });
+
+    // Listen for messages from popup
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.type === 'SHOW_TC_ANALYSIS') {
+            // Show the analysis modal with data from popup
+            const data = message.data;
+            if (data) {
+                showDetailedAnalysis(
+                    data.summary,
+                    data.simplified,
+                    data.findings,
+                    data.severity,
+                    data.pageType || 'terms',
+                    data.pricingFindings || [],
+                    data.privacyFindings || []
+                );
+            }
+            sendResponse({ success: true });
+            return true;
+        } else if (message.type === 'TRIGGER_TC_ANALYSIS') {
+            // Trigger manual analysis
+            if (analysisButton) {
+                handleAnalysisClick();
+            }
+            sendResponse({ success: true });
+            return true;
+        }
+    });
 
     console.log('[Mind-Link Terms Analyzer] Initialization complete');
 })();

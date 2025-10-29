@@ -62,10 +62,10 @@
 
       console.log("[Mind-Link] Session created, prompting with extended timeout...");
 
-      // Use Promise.race to add a timeout to the prompt call (increased to 45s)
+      // Use Promise.race to add a timeout to the prompt call (increased to 50s for complex analysis)
       const promptPromise = session.prompt(promptText);
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Prompt execution timeout')), 45000)
+        setTimeout(() => reject(new Error('Prompt execution timeout')), 50000)
       );
 
       const result = await Promise.race([promptPromise, timeoutPromise]);
@@ -88,7 +88,9 @@
       if (errorMessage.includes('timeout')) {
         console.log("[Mind-Link] Trying streamingPrompt fallback...");
         try {
-          const createOptions = {};
+          const createOptions = {
+            outputLanguage: 'en'
+          };
           if (options.systemPrompt) {
             createOptions.initialPrompts = [
               { role: 'system', content: options.systemPrompt }
@@ -100,10 +102,17 @@
           let fullResponse = '';
           const stream = session.promptStreaming(promptText);
 
+          // Add timeout for streaming too (60s)
+          const streamTimeout = setTimeout(() => {
+            session.destroy();
+            throw new Error('Streaming timeout');
+          }, 60000);
+
           for await (const chunk of stream) {
             fullResponse = chunk;
           }
 
+          clearTimeout(streamTimeout);
           session.destroy();
           console.log("[Mind-Link] Streaming response received:", fullResponse.slice(0, 100));
           return fullResponse.trim();
@@ -152,7 +161,8 @@
       const summarizer = await Summarizer.create({
         type: options.type || "tldr",
         format: options.format || "markdown",
-        length: options.length || "short" // Use "short" by default for safety
+        length: options.length || "short", // Use "short" by default for safety
+        outputLanguage: 'en' // Specify English to prevent warnings
       });
 
       console.log("[Mind-Link] Summarizer created, processing text...");
@@ -438,8 +448,9 @@
       let result;
 
       // Add timeout to prevent hanging forever
+      // Increased to 90 seconds for chunk-based summarization (6 chunks × ~15s each)
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request handler timeout')), 35000);
+        setTimeout(() => reject(new Error('Request handler timeout')), 90000);
       });
 
       const workPromise = (async () => {

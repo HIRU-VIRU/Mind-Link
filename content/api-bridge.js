@@ -70,13 +70,13 @@
           }
         }));
 
-        // Timeout after 30 seconds
+        // Timeout after 120 seconds (handles chunk-based summarization + Prompt API analysis)
         setTimeout(() => {
           if (pendingRequests.has(requestId)) {
             pendingRequests.delete(requestId);
-            reject(new Error('Request timeout'));
+            reject(new Error('Request timeout - operation took too long'));
           }
-        }, 30000);
+        }, 120000);
       });
     },
 
@@ -95,12 +95,13 @@
           }
         }));
 
+        // Increased to 120s to handle chunk-based summarization (6 chunks × ~15-20s each)
         setTimeout(() => {
           if (pendingRequests.has(requestId)) {
             pendingRequests.delete(requestId);
-            reject(new Error('Request timeout'));
+            reject(new Error('Summarization timeout - document too large'));
           }
-        }, 30000);
+        }, 120000);
       });
     },
 
@@ -123,7 +124,7 @@
             pendingRequests.delete(requestId);
             reject(new Error('Request timeout'));
           }
-        }, 30000);
+        }, 45000); // Simplify: 45s timeout
       });
     },
 
@@ -147,7 +148,7 @@
             pendingRequests.delete(requestId);
             reject(new Error('Request timeout'));
           }
-        }, 30000);
+        }, 50000); // Rewriter: 50s timeout
       });
     }
   };
