@@ -84,6 +84,30 @@
         const pageText = document.body.innerText.toLowerCase();
         const title = document.title.toLowerCase();
         const url = window.location.href.toLowerCase();
+        const pathname = window.location.pathname.toLowerCase();
+
+        // ⚠️ EXCLUDE: Pages that should NEVER be analyzed
+        const excludePatterns = [
+            '/search', // Google/Bing search results
+            '?q=', '?s=', // Search queries
+            '/results', // Search results pages
+            'google.com/webhp', // Google homepage
+            'google.com/?', // Google homepage with params
+            'bing.com/?', // Bing homepage
+            'reddit.com/r/', // Reddit posts
+            'twitter.com/', 'x.com/', // Twitter/X posts
+            'facebook.com/', // Facebook pages
+            'youtube.com/watch', // YouTube videos
+            'github.com/', // GitHub repos (not settings/terms)
+        ];
+
+        // Skip if URL matches exclude patterns
+        for (const pattern of excludePatterns) {
+            if (url.includes(pattern)) {
+                console.log('[Mind-Link Terms Analyzer] Excluded URL pattern:', pattern);
+                return { type: 'other', confidence: 1 };
+            }
+        }
 
         // T&C Detection Keywords
         const tcKeywords = [
@@ -124,46 +148,51 @@
         let tcScore = 0;
         let paymentScore = 0;
 
-        // Check URL
+        // Check URL (higher weight - most reliable signal)
         tcKeywords.forEach(kw => {
             if (url.includes(kw.replace(/\s+/g, '-')) || url.includes(kw.replace(/\s+/g, ''))) {
-                tcScore += 2;
+                tcScore += 3; // Increased from 2
             }
         });
 
         paymentKeywords.forEach(kw => {
             if (url.includes(kw)) {
-                paymentScore += 2;
+                paymentScore += 3; // Increased from 2
             }
         });
 
-        // Check title
+        // Check title (medium-high weight)
         tcKeywords.forEach(kw => {
             if (title.includes(kw)) {
-                tcScore += 3;
+                tcScore += 2; // Reduced from 3
             }
         });
 
         paymentKeywords.forEach(kw => {
             if (title.includes(kw)) {
-                paymentScore += 3;
+                paymentScore += 2; // Reduced from 3
             }
         });
 
-        // Check page text (sample first 5000 characters for performance)
-        const sampleText = pageText.substring(0, 5000);
+        // Check page text (lower weight - can have false positives)
+        // Only count if URL or title also matched
+        if (tcScore > 0) {
+            const sampleText = pageText.substring(0, 5000);
+            tcKeywords.forEach(kw => {
+                if (sampleText.includes(kw)) {
+                    tcScore += 1;
+                }
+            });
+        }
 
-        tcKeywords.forEach(kw => {
-            if (sampleText.includes(kw)) {
-                tcScore += 1;
-            }
-        });
-
-        paymentKeywords.forEach(kw => {
-            if (sampleText.includes(kw)) {
-                paymentScore += 1;
-            }
-        });
+        if (paymentScore > 0) {
+            const sampleText = pageText.substring(0, 5000);
+            paymentKeywords.forEach(kw => {
+                if (sampleText.includes(kw)) {
+                    paymentScore += 1;
+                }
+            });
+        }
 
         // Add score for UI elements
         if (hasPricingTable) paymentScore += 4;
@@ -1087,7 +1116,7 @@ Analyze now:`;
             const popupKey = `termsAnalysis_${hostname}`;
 
             try {
-                chrome.storage.local.set({
+                await chrome.storage.local.set({
                     [popupKey]: {
                         timestamp: Date.now(),
                         summary,
@@ -1102,6 +1131,7 @@ Analyze now:`;
                         url: window.location.href
                     }
                 });
+                console.log('[Mind-Link Terms Analyzer] ✅ Analysis saved to storage for popup');
             } catch (storageError) {
                 // Non-critical - just log and continue
                 if (storageError.message?.includes('Extension context invalidated')) {

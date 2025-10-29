@@ -2,6 +2,8 @@
 (async function () {
   const contentDiv = document.getElementById('content');
   let currentLanguage = 'en';
+  let currentTab = null;
+  let currentHostname = null;
 
   // Detect user language
   try {
@@ -11,25 +13,31 @@
     currentLanguage = 'en';
   }
 
-  try {
-    // Get current tab
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab || !tab.id || !tab.url) {
-      showError('Unable to access current tab');
-      return;
+  // Listen for storage changes (real-time updates)
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && currentHostname) {
+      const storageKey = `trustScore_${currentHostname}`;
+      const adsKey = `adsBlocked_${currentHostname}`;
+      const termsKey = `termsAnalysis_${currentHostname}`;
+      
+      // Check if any relevant data changed
+      if (changes[storageKey] || changes[adsKey] || changes[termsKey] || 
+          changes.totalAdsBlocked || changes.totalThreatsBlocked) {
+        const changedKeys = Object.keys(changes).filter(k => 
+          k === storageKey || k === adsKey || k === termsKey || 
+          k === 'totalAdsBlocked' || k === 'totalThreatsBlocked'
+        );
+        console.log('[Mind-Link Popup] Storage changed, refreshing...', changedKeys);
+        loadAndDisplayData();
+      }
     }
+  });
 
-    // Skip chrome:// and extension pages
-    if (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
-      showError('Cannot analyze Chrome internal pages');
-      return;
-    }
+  async function loadAndDisplayData() {
+    if (!currentTab || !currentHostname) return;
 
-    const hostname = new URL(tab.url).hostname;
-
-    // Get data from storage
-    const storageKey = `trustScore_${hostname}`;
-    const adsKey = `adsBlocked_${hostname}`;
+    const storageKey = `trustScore_${currentHostname}`;
+    const adsKey = `adsBlocked_${currentHostname}`;
     const totalAdsKey = 'totalAdsBlocked';
     const threatsKey = 'totalThreatsBlocked';
 
@@ -49,7 +57,28 @@
     // Use stored language preference or detected language
     currentLanguage = result.userLanguage || currentLanguage;
 
-    displayData(trustScore, adsBlocked, totalAdsBlocked, totalThreatsBlocked, hostname, currentLanguage, tab.id);
+    displayData(trustScore, adsBlocked, totalAdsBlocked, totalThreatsBlocked, currentHostname, currentLanguage, currentTab.id);
+  }
+
+  try {
+    // Get current tab
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab || !tab.id || !tab.url) {
+      showError('Unable to access current tab');
+      return;
+    }
+
+    // Skip chrome:// and extension pages
+    if (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
+      showError('Cannot analyze Chrome internal pages');
+      return;
+    }
+
+    currentTab = tab;
+    currentHostname = new URL(tab.url).hostname;
+
+    // Initial load
+    await loadAndDisplayData();
 
   } catch (e) {
     console.error('Popup error:', e);
