@@ -654,6 +654,15 @@ Return ONLY JSON:
       // Store trust score in chrome.storage for popup access
       const storageKey = `trustScore_${pageData.hostname}`;
       await chrome.storage.local.set({ [storageKey]: finalTrustScore });
+      
+      // Track threats blocked statistics
+      if (finalTrustScore <= 2) {
+        const threatsKey = 'totalThreatsBlocked';
+        const threatsData = await chrome.storage.local.get(threatsKey);
+        const currentCount = threatsData[threatsKey] || 0;
+        await chrome.storage.local.set({ [threatsKey]: currentCount + 1 });
+      }
+      
       console.log("[Mind-Link] Trust score stored:", finalTrustScore);
 
       if (finalTrustScore <= 3) {
