@@ -45,6 +45,7 @@
       ],
       "js": [
         "content/api-bridge.js",
+        "content/translator.js",
         "content/utils.js",
         "content/dictionary.js",
         "content/cosmetic.js",
