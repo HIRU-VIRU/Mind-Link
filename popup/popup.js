@@ -1,6 +1,15 @@
-// Popup script: Display trust score and ads blocked count
+// Enhanced Popup Script with Translator Support and Modern UI
 (async function () {
   const contentDiv = document.getElementById('content');
+  let currentLanguage = 'en';
+  
+  // Detect user language
+  try {
+    const lang = (navigator.language || 'en').split('-')[0].toLowerCase();
+    currentLanguage = lang;
+  } catch (e) {
+    currentLanguage = 'en';
+  }
 
   try {
     // Get current tab
@@ -18,17 +27,29 @@
 
     const hostname = new URL(tab.url).hostname;
 
-    // Get trust score from storage
+    // Get data from storage
     const storageKey = `trustScore_${hostname}`;
     const adsKey = `adsBlocked_${hostname}`;
+    const totalAdsKey = 'totalAdsBlocked';
+    const threatsKey = 'totalThreatsBlocked';
 
-    const result = await chrome.storage.local.get([storageKey, adsKey, 'totalAdsBlocked']);
+    const result = await chrome.storage.local.get([
+      storageKey, 
+      adsKey, 
+      totalAdsKey, 
+      threatsKey,
+      'userLanguage'
+    ]);
 
     const trustScore = result[storageKey] || null;
     const adsBlocked = result[adsKey] || 0;
-    const totalAdsBlocked = result.totalAdsBlocked || 0;
+    const totalAdsBlocked = result[totalAdsKey] || 0;
+    const totalThreatsBlocked = result[threatsKey] || 0;
+    
+    // Use stored language preference or detected language
+    currentLanguage = result.userLanguage || currentLanguage;
 
-    displayData(trustScore, adsBlocked, totalAdsBlocked, hostname);
+    displayData(trustScore, adsBlocked, totalAdsBlocked, totalThreatsBlocked, hostname);
 
   } catch (e) {
     console.error('Popup error:', e);
