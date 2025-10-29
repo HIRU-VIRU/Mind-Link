@@ -57,92 +57,201 @@
   }
 })();
 
-function displayData(trustScore, adsBlocked, totalAdsBlocked, hostname) {
+async function displayData(trustScore, adsBlocked, totalAdsBlocked, totalThreatsBlocked, hostname) {
   const contentDiv = document.getElementById('content');
 
+  // Translations
+  const translations = {
+    en: {
+      trustScore: 'Trust Score',
+      dangerous: 'Dangerous',
+      warning: 'Warning',
+      safe: 'Safe',
+      notRated: 'Not Rated',
+      dangerousMsg: 'This site looks very suspicious',
+      warningMsg: 'This site may be suspicious',
+      safeMsg: 'This site appears safe',
+      notAnalyzed: 'Not Analyzed',
+      autoAnalysisMsg: 'Analysis will run automatically when you visit suspicious sites',
+      adsBlocked: 'Ads Blocked',
+      onThisSite: 'On this site',
+      threatsBlocked: 'Threats Blocked',
+      allTime: 'All time',
+      refresh: 'Refresh Analysis',
+      settings: 'Settings',
+      language: 'Language'
+    }
+  };
+
+  const t = translations['en']; // Default to English for now
+
   let trustHTML = '';
+  let emoji = '🔍';
+  let label = t.notRated;
+  let message = t.notAnalyzed;
+  let scoreClass = '';
+  let progressPercent = 0;
 
   if (trustScore !== null) {
-    let cardClass = '';
-    let emoji = '🔍';
-    let label = 'Not Rated';
-    let message = 'No analysis available yet';
-
+    progressPercent = (trustScore / 5) * 100;
+    
     if (trustScore <= 2) {
-      cardClass = 'danger';
+      scoreClass = 'danger';
       emoji = '🛑';
-      label = 'Dangerous';
-      message = 'This site looks very suspicious';
+      label = t.dangerous;
+      message = t.dangerousMsg;
     } else if (trustScore === 3) {
-      cardClass = 'warning';
+      scoreClass = 'warning';
       emoji = '⚠️';
-      label = 'Warning';
-      message = 'This site may be suspicious';
+      label = t.warning;
+      message = t.warningMsg;
     } else if (trustScore >= 4) {
-      cardClass = 'safe';
+      scoreClass = 'safe';
       emoji = '✅';
-      label = 'Safe';
-      message = 'This site appears safe';
+      label = t.safe;
+      message = t.safeMsg;
     }
 
     trustHTML = `
       <div class="trust-score-section">
-        <div class="section-title">Trust Score</div>
-        <div class="trust-score-card ${cardClass}">
-          <div class="trust-score-emoji">${emoji}</div>
-          <div class="trust-score-value">${trustScore}/5</div>
-          <div class="trust-score-label">${label}</div>
-          <div class="trust-score-message">${message}</div>
+        <div class="section-title">${t.trustScore}</div>
+        <div class="trust-score-card ${scoreClass}">
+          <div class="trust-circle">
+            <svg viewBox="0 0 120 120">
+              <circle
+                class="trust-circle-bg"
+                cx="60"
+                cy="60"
+                r="52"
+              />
+              <circle
+                class="trust-circle-progress ${scoreClass}"
+                cx="60"
+                cy="60"
+                r="52"
+                stroke-dasharray="${2 * Math.PI * 52}"
+                stroke-dashoffset="${2 * Math.PI * 52 * (1 - progressPercent / 100)}"
+              />
+            </svg>
+            <div class="trust-circle-content">
+              <div class="trust-emoji">${emoji}</div>
+              <div class="trust-value">${trustScore}/5</div>
+            </div>
+          </div>
+          <div class="trust-label">${label}</div>
+          <div class="trust-message">${message}</div>
         </div>
       </div>
     `;
   } else {
     trustHTML = `
       <div class="trust-score-section">
-        <div class="section-title">Trust Score</div>
+        <div class="section-title">${t.trustScore}</div>
         <div class="trust-score-card">
-          <div class="trust-score-emoji">🔍</div>
-          <div class="trust-score-value">—</div>
-          <div class="trust-score-label">Not Analyzed</div>
-          <div class="trust-score-message">Analysis will run automatically when you visit suspicious sites</div>
+          <div class="trust-circle">
+            <svg viewBox="0 0 120 120">
+              <circle
+                class="trust-circle-bg"
+                cx="60"
+                cy="60"
+                r="52"
+              />
+            </svg>
+            <div class="trust-circle-content">
+              <div class="trust-emoji">${emoji}</div>
+              <div class="trust-value">—</div>
+            </div>
+          </div>
+          <div class="trust-label">${label}</div>
+          <div class="trust-message">${t.autoAnalysisMsg}</div>
         </div>
       </div>
     `;
   }
 
+  // Language selector
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'it', name: 'Italiano' },
+    { code: 'pt', name: 'Português' },
+    { code: 'ja', name: '日本語' },
+    { code: 'zh', name: '中文' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'hi', name: 'हिन्दी' }
+  ];
+
+  const languageOptions = languages
+    .map(lang => `<option value="${lang.code}">${lang.name}</option>`)
+    .join('');
+
   contentDiv.innerHTML = `
     ${trustHTML}
     
-    <div class="ads-blocked-section">
-      <div class="ads-blocked-info">
-        <div class="ads-blocked-icon">🚫</div>
-        <div class="ads-blocked-text">
-          <h3>Ads Blocked</h3>
-          <p>On this site</p>
-        </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🚫</div>
+        <div class="stat-value">${adsBlocked}</div>
+        <div class="stat-label">${t.adsBlocked}</div>
+        <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">${t.onThisSite}</div>
       </div>
-      <div class="ads-blocked-count">${adsBlocked}</div>
+      <div class="stat-card">
+        <div class="stat-icon">🛡️</div>
+        <div class="stat-value">${totalThreatsBlocked || 0}</div>
+        <div class="stat-label">${t.threatsBlocked}</div>
+        <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">${t.allTime}</div>
+      </div>
     </div>
     
-    <button class="refresh-btn" id="refreshBtn" type="button">
-      🔄 Refresh Analysis
-    </button>
+    <div class="language-section">
+      <div class="section-title">${t.language}</div>
+      <select class="language-selector" id="languageSelector">
+        ${languageOptions}
+      </select>
+    </div>
+    
+    <div class="actions">
+      <button class="btn btn-primary" id="refreshBtn" type="button">
+        <span>🔄</span>
+        <span>${t.refresh}</span>
+      </button>
+    </div>
   `;
 
-  // Add refresh button listener
-  document.getElementById('refreshBtn').addEventListener('click', async () => {
-    try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tab && tab.id) {
-        // Trigger a new phishing check
-        chrome.tabs.sendMessage(tab.id, { type: 'RECHECK_PHISHING' });
-        window.close();
+  // Add event listeners
+  const refreshBtn = document.getElementById('refreshBtn');
+  const languageSelector = document.getElementById('languageSelector');
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tab && tab.id) {
+          // Trigger a new phishing check
+          chrome.tabs.sendMessage(tab.id, { type: 'RECHECK_PHISHING' });
+          window.close();
+        }
+      } catch (e) {
+        console.error('Refresh error:', e);
       }
-    } catch (e) {
-      console.error('Refresh error:', e);
-    }
-  });
+    });
+  }
+
+  if (languageSelector) {
+    languageSelector.addEventListener('change', async (e) => {
+      const newLang = e.target.value;
+      
+      // Save language preference
+      await chrome.storage.local.set({ userLanguage: newLang });
+      
+      // Reload popup with new language
+      location.reload();
+    });
+  }
 }
+
 
 function showError(message) {
   const contentDiv = document.getElementById('content');
