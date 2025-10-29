@@ -146,6 +146,38 @@ Protects users from subscription traps hidden in complex Terms & Conditions:
 
 ---
 
+### 4. **Multi-Language Support** 🌍 **[NEW!]**
+**API Used:** Translator API
+
+Protects users worldwide with automatic translation of warnings and findings:
+
+**Supported Languages (10):**
+- English, Spanish (Español), French (Français), German (Deutsch)
+- Italian (Italiano), Portuguese (Português)  
+- Japanese (日本語), Chinese (中文)
+- Arabic (العربية), Hindi (हिन्दी)
+
+**What Gets Translated:**
+- ✅ Phishing warnings ("Dangerous site" → "Sitio peligroso")
+- ✅ Trust score labels and messages
+- ✅ T&C findings and summaries
+- ✅ Extension popup interface
+
+**How It Works:**
+1. **Auto-detection:** Detects browser language automatically
+2. **Manual Selection:** Change language in popup settings
+3. **Smart Translation:** Uses Chrome Translator API for accuracy
+4. **Cached Results:** Instant translation on repeat visits
+
+**Example:**
+```
+English: "⚠️ WARNING: This site may be suspicious"
+Spanish: "⚠️ ADVERTENCIA: Este sitio puede ser sospechoso"
+French: "⚠️ ATTENTION: Ce site peut être suspect"
+```
+
+---
+
 ## 🎯 How to Use
 
 ### Automatic Protection (No Action Required)
