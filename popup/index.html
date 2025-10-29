@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mind-Link - Website Safety</title>
+    <title>PhishGuard Vision</title>
     <style>
       * {
         margin: 0;
@@ -11,144 +11,328 @@
         box-sizing: border-box;
       }
       
+      :root {
+        --primary: #667eea;
+        --primary-dark: #5568d3;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --safe: #10b981;
+        --bg-light: #f8f9fa;
+        --text-dark: #1f2937;
+        --text-gray: #6b7280;
+        --border-light: #e5e7eb;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      
       body {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        width: 320px;
-        padding: 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        width: 380px;
+        min-height: 500px;
+        background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+        padding: 0;
       }
       
       .container {
         background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
       }
       
+      /* Header Section */
       .header {
+        background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
         text-align: center;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 2px solid #f0f0f0;
       }
       
-      .header h1 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
+      .header-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 22px;
+        font-weight: 700;
         margin-bottom: 4px;
       }
       
-      .header p {
-        font-size: 12px;
-        color: #666;
+      .header-subtitle {
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 400;
       }
       
+      .header-status {
+        margin-top: 12px;
+        font-size: 11px;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      /* Content Section */
+      .content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      
+      /* Trust Score Card */
       .trust-score-section {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
       
       .section-title {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
-        color: #666;
-        margin-bottom: 12px;
+        color: var(--text-gray);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        margin-bottom: 12px;
       }
       
       .trust-score-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
-        padding: 20px;
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
         text-align: center;
-        color: white;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: var(--shadow);
+        border: 2px solid var(--border-light);
+        position: relative;
+        overflow: hidden;
       }
       
-      .trust-score-card.danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      .trust-score-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary) 0%, #764ba2 100%);
       }
       
-      .trust-score-card.warning {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      .trust-score-card.danger::before {
+        background: linear-gradient(90deg, var(--danger) 0%, #dc2626 100%);
       }
       
-      .trust-score-card.safe {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      .trust-score-card.warning::before {
+        background: linear-gradient(90deg, var(--warning) 0%, #d97706 100%);
       }
       
-      .trust-score-emoji {
-        font-size: 48px;
-        margin-bottom: 8px;
+      .trust-score-card.safe::before {
+        background: linear-gradient(90deg, var(--safe) 0%, #059669 100%);
       }
       
-      .trust-score-value {
+      /* Circular Trust Score */
+      .trust-circle {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 16px;
+        position: relative;
+      }
+      
+      .trust-circle svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+      }
+      
+      .trust-circle-bg {
+        fill: none;
+        stroke: var(--bg-light);
+        stroke-width: 8;
+      }
+      
+      .trust-circle-progress {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1s ease-in-out;
+      }
+      
+      .trust-circle-progress.danger {
+        stroke: var(--danger);
+      }
+      
+      .trust-circle-progress.warning {
+        stroke: var(--warning);
+      }
+      
+      .trust-circle-progress.safe {
+        stroke: var(--safe);
+      }
+      
+      .trust-circle-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+      
+      .trust-emoji {
         font-size: 32px;
-        font-weight: 700;
         margin-bottom: 4px;
       }
       
-      .trust-score-label {
-        font-size: 14px;
-        opacity: 0.9;
-      }
-      
-      .trust-score-message {
-        font-size: 12px;
-        margin-top: 8px;
-        opacity: 0.85;
-        line-height: 1.4;
-      }
-      
-      .ads-blocked-section {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      
-      .ads-blocked-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      
-      .ads-blocked-icon {
-        font-size: 32px;
-      }
-      
-      .ads-blocked-text h3 {
-        font-size: 14px;
-        color: #333;
-        margin-bottom: 2px;
-      }
-      
-      .ads-blocked-text p {
-        font-size: 11px;
-        color: #666;
-      }
-      
-      .ads-blocked-count {
-        font-size: 28px;
+      .trust-value {
+        font-size: 24px;
         font-weight: 700;
-        color: #667eea;
+        color: var(--text-dark);
       }
       
+      .trust-label {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+      }
+      
+      .trust-message {
+        font-size: 13px;
+        color: var(--text-gray);
+        line-height: 1.5;
+      }
+      
+      /* Statistics Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      
+      .stat-card {
+        background: var(--bg-light);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        border: 1px solid var(--border-light);
+      }
+      
+      .stat-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 4px;
+      }
+      
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-gray);
+        font-weight: 500;
+      }
+      
+      /* Language Selector */
+      .language-section {
+        margin-bottom: 20px;
+      }
+      
+      .language-selector {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border-light);
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--text-dark);
+        background: white;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      
+      .language-selector:hover {
+        border-color: var(--primary);
+      }
+      
+      .language-selector:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      
+      /* Action Buttons */
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+      }
+      
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+      
+      .btn-secondary {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+      
+      .btn-secondary:hover {
+        background: var(--primary);
+        color: white;
+      }
+      
+      /* Loading State */
       .loading {
         text-align: center;
-        padding: 20px;
-        color: #666;
+        padding: 40px 20px;
       }
       
       .loading-spinner {
-        width: 40px;
-        height: 40px;
-        margin: 0 auto 12px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #667eea;
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 16px;
+        border: 4px solid var(--bg-light);
+        border-top: 4px solid var(--primary);
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
@@ -158,43 +342,78 @@
         100% { transform: rotate(360deg); }
       }
       
+      .loading-text {
+        color: var(--text-gray);
+        font-size: 14px;
+      }
+      
+      /* Error State */
       .error {
         text-align: center;
-        padding: 20px;
-        color: #ef4444;
+        padding: 40px 20px;
       }
       
-      .refresh-btn {
-        width: 100%;
-        margin-top: 16px;
-        padding: 10px;
-        background: #667eea;
-        color: white;
-        border: none;
-        border-radius: 8px;
+      .error-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+      
+      .error-text {
+        color: var(--danger);
         font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
+        line-height: 1.5;
       }
       
-      .refresh-btn:hover {
-        background: #5568d3;
+      /* Footer */
+      .footer {
+        padding: 16px 20px;
+        background: var(--bg-light);
+        border-top: 1px solid var(--border-light);
+        text-align: center;
+      }
+      
+      .footer-text {
+        font-size: 11px;
+        color: var(--text-gray);
+      }
+      
+      .footer-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      
+      .footer-link:hover {
+        text-decoration: underline;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>🛡️ Mind-Link</h1>
-        <p>Website Safety Monitor</p>
+        <div class="header-title">
+          <span>🛡️</span>
+          <span>PhishGuard Vision</span>
+        </div>
+        <div class="header-subtitle">AI-Powered Safety Shield</div>
+        <div class="header-status">
+          <span class="status-dot"></span>
+          <span>Protection Active</span>
+        </div>
       </div>
       
-      <div id="content">
+      <div class="content" id="content">
         <div class="loading">
           <div class="loading-spinner"></div>
-          <p>Analyzing website...</p>
+          <p class="loading-text">Analyzing website...</p>
         </div>
+      </div>
+      
+      <div class="footer">
+        <p class="footer-text">
+          Protected by Chrome Built-in AI<br>
+          <a href="#" class="footer-link" id="aboutLink">Learn More</a>
+        </p>
       </div>
     </div>
     <script src="popup.js"></script>
