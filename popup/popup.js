@@ -19,12 +19,12 @@
       const storageKey = `trustScore_${currentHostname}`;
       const adsKey = `adsBlocked_${currentHostname}`;
       const termsKey = `termsAnalysis_${currentHostname}`;
-      
+
       // Check if any relevant data changed
-      if (changes[storageKey] || changes[adsKey] || changes[termsKey] || 
-          changes.totalAdsBlocked || changes.totalThreatsBlocked) {
-        const changedKeys = Object.keys(changes).filter(k => 
-          k === storageKey || k === adsKey || k === termsKey || 
+      if (changes[storageKey] || changes[adsKey] || changes[termsKey] ||
+        changes.totalAdsBlocked || changes.totalThreatsBlocked) {
+        const changedKeys = Object.keys(changes).filter(k =>
+          k === storageKey || k === adsKey || k === termsKey ||
           k === 'totalAdsBlocked' || k === 'totalThreatsBlocked'
         );
         console.log('[Mind-Link Popup] Storage changed, refreshing...', changedKeys);

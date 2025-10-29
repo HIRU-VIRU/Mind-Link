@@ -407,13 +407,19 @@ Return ONLY JSON:
     });
 
     if (isWhitelisted) {
-      console.log(`[Mind-Link] ✅ Skipping analysis - whitelisted trusted site: ${location.hostname}`);
+      console.log(`[Mind-Link] ✅ Whitelisted trusted site: ${location.hostname} - Storing safe score`);
+      // Store a perfect trust score for whitelisted sites
+      const storageKey = `trustScore_${location.hostname}`;
+      await chrome.storage.local.set({ [storageKey]: 5 });
       return;
     }
 
     // Check if Chrome AI is available
     if (!window.__notesio_apiAvailable) {
-      console.log("[Mind-Link] Chrome AI not available, skipping phishing check");
+      console.log("[Mind-Link] Chrome AI not available - Storing neutral score");
+      // Store a neutral trust score when AI is unavailable
+      const storageKey = `trustScore_${location.hostname}`;
+      await chrome.storage.local.set({ [storageKey]: 3 });
       return;
     }
 
