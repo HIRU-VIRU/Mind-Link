@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal - Log In</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 450px;
+            width: 90%;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* INTENTIONALLY BLURRY/WRONG LOGO for AI detection */
+        .logo h1 {
+            color: #0070BA; /* Wrong color - should be #003087 */
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: -2px;
+            filter: blur(0.5px); /* Subtle blur for AI to detect */
+            font-family: 'Verdana', sans-serif; /* Wrong font */
+        }
+        
+        .alert {
+            background: #ff4444;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .urgency {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+        
+        .urgency strong {
+            color: #d32f2f;
+            font-size: 18px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #0070BA;
+        }
+        
+        .suspicious-field {
+            background: #fff9e6;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #0070BA;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #005ea6;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .timer {
+            background: #000;
+            color: #ff0000;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .fake-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
+        }
+        
+        .fake-security::before {
+            content: "🔒";
+            font-size: 24px;
+        }
+        
+        /* Multiple suspicious elements for AI to detect */
+        .multiple-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .multiple-buttons button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 14px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- WRONG LOGO for AI detection -->
+        <div class="logo">
+            <h1>PayPal</h1>
+        </div>
+        
+        <!-- URGENCY LANGUAGE -->
+        <div class="alert">
+            ⚠️ URGENT SECURITY ALERT
+        </div>
+        
+        <div class="urgency">
+            <strong>IMMEDIATE ACTION REQUIRED!</strong><br>
+            Your account has been temporarily suspended due to unusual activity. 
+            Verify your identity within <span id="countdown">15:00</span> minutes or your account will be permanently closed.
+        </div>
+        
+        <!-- FAKE COUNTDOWN TIMER -->
+        <div class="timer">
+            Time Remaining: <span id="timer">14:37</span>
+        </div>
+        
+        <!-- FAKE SECURITY BADGE -->
+        <div class="fake-security">
+            <span>Secure Connection Verified</span>
+        </div>
+        
+        <h2>Verify Your Account</h2>
+        <p>Please confirm your account details to restore full access immediately.</p>
+        
+        <form id="phishingForm" onsubmit="return false;">
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            
+            <!-- SUSPICIOUS: Asking for SSN (red flag) -->
+            <div class="form-group">
+                <label for="ssn">Last 4 Digits of SSN (for verification) *</label>
+                <input type="text" id="ssn" name="ssn" class="suspicious-field" required placeholder="1234" maxlength="4">
+            </div>
+            
+            <!-- SUSPICIOUS: Asking for credit card -->
+            <div class="form-group">
+                <label for="card">Credit Card Number (to confirm identity) *</label>
+                <input type="text" id="card" name="card" class="suspicious-field" required placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            
+            <button type="submit">VERIFY NOW & RESTORE ACCESS</button>
+            
+            <!-- MULTIPLE CONFUSING BUTTONS -->
+            <div class="multiple-buttons">
+                <button type="button">Confirm Identity</button>
+                <button type="button">Secure Account</button>
+                <button type="button">Verify Payment</button>
+                <button type="button">Update Information</button>
+            </div>
+        </form>
+        
+        <div class="footer">
+            © 2024 PayPal Inc. All rights reserved. | Secure Login Portal<br>
+            <small style="color: #ff0000;">⚠️ This is a FAKE site for demo purposes only ⚠️</small>
+        </div>
+    </div>
+    
+    <script>
+        // Fake countdown timer to create urgency
+        let seconds = 877; // 14:37
+        setInterval(() => {
+            seconds--;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('timer').textContent = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            
+            if (seconds <= 0) {
+                seconds = 877;
+            }
+        }, 1000);
+        
+        // Prevent actual form submission
+        document.getElementById('phishingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('⚠️ DEMO SITE: This is a fake phishing site for testing purposes. No data is collected.');
+        });
+    </script>
+</body>
+</html>

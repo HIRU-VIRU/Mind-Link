@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperSecure Antivirus - $1 Trial Offer!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero .price {
+            font-size: 72px;
+            font-weight: bold;
+            color: #ffeb3b;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin: 20px 0;
+        }
+        
+        .hero .original-price {
+            text-decoration: line-through;
+            color: rgba(255,255,255,0.6);
+            font-size: 36px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: #4CAF50;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .urgency-banner {
+            background: #ff9800;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            animation: flash 2s infinite;
+        }
+        
+        @keyframes flash {
+            0%, 100% { background: #ff9800; }
+            50% { background: #f57c00; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature h3 {
+            color: #4CAF50;
+            margin: 15px 0;
+        }
+        
+        /* THE TERMS & CONDITIONS SECTION */
+        .terms-section {
+            background: #f5f5f5;
+            color: #333;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        
+        .terms-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .terms-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .terms-header h2 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .terms-content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 11px; /* Tiny text */
+            line-height: 1.4;
+            color: #666;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+        
+        .terms-content h3 {
+            font-size: 14px;
+            color: #000;
+            margin: 20px 0 10px 0;
+        }
+        
+        .terms-content p {
+            margin-bottom: 15px;
+        }
+        
+        /* Hidden fees in legalese */
+        .hidden-trap {
+            color: #999;
+            font-size: 10px;
+        }
+        
+        .accept-terms {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .checkbox-label {
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .checkbox-label input {
+            margin-right: 10px;
+            transform: scale(1.5);
+        }
+        
+        .final-cta {
+            text-align: center;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="urgency-banner">
+        ⚠️ LIMITED TIME OFFER - EXPIRES IN <span id="countdown">23:45:12</span> ⚠️
+    </div>
+    
+    <div class="hero">
+        <h1>🛡️ SuperSecure Antivirus Pro</h1>
+        <p style="font-size: 24px;">Protect Your Computer from Viruses, Malware & Hackers!</p>
+        
+        <div class="price">
+            ONLY $1!
+        </div>
+        <div class="original-price">
+            Regular Price: $299.99
+        </div>
+        
+        <p style="font-size: 20px; margin: 20px 0;">
+            ✓ Real-Time Protection<br>
+            ✓ 24/7 Threat Monitoring<br>
+            ✓ Free VPN Included<br>
+            ✓ Identity Theft Protection
+        </p>
+        
+        <a href="#terms" class="cta-button">START $1 TRIAL NOW!</a>
+        
+        <p style="font-size: 14px; margin-top: 20px; opacity: 0.8;">
+            Over 10 Million Protected Users Worldwide!
+        </p>
+    </div>
+    
+    <div class="container">
+        <div class="features">
+            <div class="feature">
+                <div style="font-size: 48px;">🦠</div>
+                <h3>Virus Protection</h3>
+                <p>Blocks 99.9% of malware and ransomware threats</p>
+            </div>
+            <div class="feature">
+                <div style="font-size: 48px;">🔒</div>
+                <h3>Secure Banking</h3>
+                <p>Protects your financial transactions online</p>
+            </div>
+            <div class="feature">
+                <div style="font-size: 48px;">🌐</div>
+                <h3>Free VPN</h3>
+                <p>Browse anonymously and securely</p>
+            </div>
+            <div class="feature">
+                <div style="font-size: 48px;">📱</div>
+                <h3>Multi-Device</h3>
+                <p>Works on Windows, Mac, Android, iOS</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- THE TRAP: Terms & Conditions with Hidden Fees -->
+    <div class="terms-section" id="terms">
+        <div class="terms-container">
+            <div class="terms-header">
+                <h2>📄 Terms & Conditions</h2>
+                <p style="color: #666;">Please review our terms before starting your trial</p>
+            </div>
+            
+            <div class="terms-content">
+                <h3>1. SUBSCRIPTION AGREEMENT</h3>
+                <p>
+                    This Subscription Agreement ("Agreement") is entered into between SuperSecure Technologies LLC ("Company", "we", "us") and the individual or entity ("Subscriber", "you") accessing our software services. By clicking "I Agree" or by downloading, installing, or using our antivirus software, you acknowledge that you have read, understood, and agree to be bound by all terms and conditions set forth herein.
+                </p>
+                
+                <h3>2. TRIAL PERIOD AND PROMOTIONAL PRICING</h3>
+                <p>
+                    The Company offers a promotional introductory trial period whereby new subscribers may access the SuperSecure Antivirus Pro software suite for a <strong>nominal fee of One Dollar ($1.00 USD)</strong> for the initial billing cycle of thirty (30) calendar days.
+                </p>
+                
+                <p class="hidden-trap">
+                    <strong>2.1 AUTOMATIC RENEWAL TERMS:</strong> Upon expiration of the aforementioned introductory period, your subscription shall <strong>AUTOMATICALLY RENEW</strong> at the standard retail rate of <strong>NINETY-NINE DOLLARS AND NINETY-NINE CENTS ($99.99 USD) PER MONTH</strong> unless you provide written notice of cancellation no less than seven (7) business days prior to the renewal date. Renewal charges will be automatically debited from the payment method on file. You hereby authorize the Company to charge your credit card, debit card, or payment account on a recurring monthly basis.
+                </p>
+                
+                <h3>3. PAYMENT AUTHORIZATION</h3>
+                <p>
+                    By subscribing to our services, you authorize SuperSecure Technologies LLC to automatically charge your designated payment method on a monthly recurring basis. You represent and warrant that you have the legal right to use any payment method you provide to us.
+                </p>
+                
+                <p class="hidden-trap">
+                    <strong>3.1 NON-REFUNDABLE POLICY:</strong> All subscription fees, including but not limited to the introductory promotional fee and subsequent monthly charges, are <strong>NON-REFUNDABLE</strong> under any circumstances, including but not limited to early termination, dissatisfaction with service, technical issues, or failure to use the software. No prorated refunds will be issued for partial billing periods.
+                </p>
+                
+                <h3>4. CANCELLATION POLICY</h3>
+                <p class="hidden-trap">
+                    To cancel your subscription, you must submit a written cancellation request via certified mail to our corporate headquarters at: SuperSecure Technologies LLC, Attention: Cancellation Department, P.O. Box 9876, Remote Location, ST 99999. Email and phone cancellations are not accepted. Cancellation requests must be received <strong>no less than seven (7) business days prior to your next billing date</strong> to avoid being charged for the subsequent month. Processing of cancellation requests may take up to 15 business days. During this processing period, you may be charged for additional billing cycles.
+                </p>
+                
+                <h3>5. PRICE CHANGES</h3>
+                <p class="hidden-trap">
+                    The Company reserves the right to modify subscription pricing at any time without prior notice. Such price changes may take effect immediately upon the next billing cycle. Continued use of the software after a price increase constitutes acceptance of the new pricing terms.
+                </p>
+                
+                <h3>6. ADDITIONAL FEES</h3>
+                <p class="hidden-trap">
+                    <strong>6.1 MAINTENANCE FEE:</strong> In addition to the monthly subscription fee, subscribers may be subject to an annual maintenance and support fee of Forty-Nine Dollars and Ninety-Nine Cents ($49.99 USD) charged separately each year.<br><br>
+                    
+                    <strong>6.2 PREMIUM SUPPORT FEE:</strong> Technical support inquiries beyond basic troubleshooting may incur additional charges of Twenty-Nine Dollars and Ninety-Nine Cents ($29.99 USD) per incident.<br><br>
+                    
+                    <strong>6.3 DATA RECOVERY FEE:</strong> Should you require data recovery services, fees may range from Ninety-Nine Dollars ($99.00 USD) to Four Hundred Ninety-Nine Dollars ($499.00 USD) depending on the complexity of the recovery.
+                </p>
+                
+                <h3>7. FREE TRIAL LIMITATIONS</h3>
+                <p class="hidden-trap">
+                    Notwithstanding the promotional language, the One Dollar ($1.00 USD) charge is <strong>not a "free trial"</strong> but rather a discounted introductory rate. Only one discounted trial per household, IP address, payment method, or individual is permitted. Multiple accounts may result in immediate charges at full retail pricing.
+                </p>
+                
+                <h3>8. LICENSE RESTRICTIONS</h3>
+                <p>
+                    The software license granted is non-exclusive, non-transferable, and revocable at the Company's sole discretion. You may not reverse engineer, decompile, or disassemble the software. Violation of these terms may result in immediate termination without refund.
+                </p>
+                
+                <h3>9. WARRANTY DISCLAIMER</h3>
+                <p>
+                    THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. THE COMPANY DOES NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, OR COMPLETELY SECURE.
+                </p>
+                
+                <h3>10. LIMITATION OF LIABILITY</h3>
+                <p class="hidden-trap">
+                    IN NO EVENT SHALL SUPERSECURE TECHNOLOGIES LLC BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF DATA, LOSS OF PROFITS, OR COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, WHETHER BASED ON WARRANTY, CONTRACT, TORT, OR ANY OTHER LEGAL THEORY, EVEN IF THE COMPANY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+                </p>
+                
+                <h3>11. BINDING ARBITRATION</h3>
+                <p class="hidden-trap">
+                    Any dispute arising from this Agreement shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association. You hereby waive any right to participate in a class action lawsuit or class-wide arbitration. Arbitration shall take place in the Company's jurisdiction of incorporation, regardless of your location.
+                </p>
+                
+                <h3>12. GOVERNING LAW</h3>
+                <p>
+                    This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law provisions.
+                </p>
+                
+                <h3>13. ENTIRE AGREEMENT</h3>
+                <p>
+                    This Agreement constitutes the entire agreement between you and SuperSecure Technologies LLC and supersedes all prior or contemporaneous communications and proposals, whether oral or written.
+                </p>
+                
+                <p style="margin-top: 30px; font-size: 10px; color: #999;">
+                    Last Updated: October 2024<br>
+                    SuperSecure Technologies LLC - All Rights Reserved<br>
+                    Document Version 3.7.2
+                </p>
+            </div>
+            
+            <div class="accept-terms">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="agreeTerms" required>
+                    I have read and agree to the Terms & Conditions
+                </label>
+            </div>
+            
+            <div class="final-cta">
+                <button class="cta-button" onclick="acceptTerms()">
+                    START MY $1 TRIAL NOW
+                </button>
+                <p style="color: #666; margin-top: 20px; font-size: 14px;">
+                    By clicking above, you agree to the automatic renewal terms.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Countdown timer
+        let totalSeconds = 85512; // 23:45:12
+        setInterval(() => {
+            totalSeconds--;
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            document.getElementById('countdown').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (totalSeconds <= 0) {
+                totalSeconds = 85512;
+            }
+        }, 1000);
+        
+        function acceptTerms() {
+            if (!document.getElementById('agreeTerms').checked) {
+                alert('Please read and accept the Terms & Conditions');
+                return;
+            }
+            alert('⚠️ DEMO SITE: This is a fake subscription site for testing purposes.\n\nHidden fees detected:\n• $99.99/month after $1 trial\n• $49.99 annual maintenance fee\n• Non-refundable\n• Must cancel 7 days before renewal via certified mail only!\n\nNo actual subscription created.');
+        }
+    </script>
+</body>
+</html>

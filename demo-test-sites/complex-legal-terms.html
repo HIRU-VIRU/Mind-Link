@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software License Agreement - ComplexLegal Corp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .legal-text {
+            font-size: 13px;
+            text-align: justify;
+            color: #444;
+        }
+        
+        .legal-text h2 {
+            font-size: 18px;
+            margin: 30px 0 15px 0;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+        
+        .legal-text h3 {
+            font-size: 15px;
+            margin: 20px 0 10px 0;
+            color: #34495e;
+        }
+        
+        .legal-text p {
+            margin-bottom: 15px;
+            line-height: 1.9;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .subsection {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .indented {
+            margin-left: 40px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .emphasis {
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .simplify-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .simplify-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .simplify-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 450px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+            padding: 30px;
+            overflow-y: auto;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        .close-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close-panel:hover {
+            color: #333;
+        }
+        
+        .comparison {
+            margin: 20px 0;
+        }
+        
+        .comparison-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .original {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 15px;
+            font-size: 12px;
+            font-family: 'Georgia', serif;
+            color: #856404;
+        }
+        
+        .simplified {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            color: #155724;
+            line-height: 1.6;
+        }
+        
+        .label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>End User License Agreement</h1>
+        <p>ComplexLegal Software Corporation</p>
+        <p style="font-size: 14px; opacity: 0.8;">Effective Date: January 1, 2024</p>
+    </div>
+    
+    <div class="container">
+        <div class="legal-text">
+            <div class="section">
+                <h2>Article I - Definitions and Interpretation</h2>
+                
+                <p>
+                    For the purposes of this End User License Agreement (hereinafter referred to as the "Agreement"), the following terms shall have the meanings ascribed to them below, unless the context clearly indicates otherwise. The parties of the first part (the "Licensor") and the party of the second part (the "Licensee") hereby acknowledge and agree that the interpretation of these definitions shall be governed by the principles of contractual interpretation as established under applicable law.
+                </p>
+                
+                <div class="subsection">
+                    <h3>1.1 Software</h3>
+                    <p class="indented">
+                        "Software" shall mean and include, without limitation, all computer programs, algorithms, source code, object code, executable files, documentation, user interfaces, graphical elements, data structures, databases, and any and all derivative works, modifications, enhancements, or updates thereto, whether now existing or hereafter developed, in whatever form or medium, whether tangible or intangible, and all intellectual property rights embodied therein or appurtenant thereto.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>1.2 Licensee</h3>
+                    <p class="indented">
+                        "Licensee" shall mean and refer to any natural person, legal entity, partnership, corporation, limited liability company, trust, estate, or any other form of organization that downloads, installs, accesses, or uses the Software, whether for commercial, non-commercial, personal, or any other purpose whatsoever.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article II - Grant of License</h2>
+                
+                <p>
+                    Subject to the terms and conditions set forth in this Agreement, and contingent upon the Licensee's strict compliance with all obligations, restrictions, and limitations herein contained, the Licensor hereby grants to the Licensee a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to use the Software solely for the Licensee's internal business purposes or personal use, as applicable.
+                </p>
+                
+                <div class="subsection">
+                    <h3>2.1 Scope of License</h3>
+                    <p class="indented">
+                        The license granted herein is expressly limited to the right to install and execute the Software on computing devices owned, leased, or otherwise lawfully controlled by the Licensee. <span class="emphasis">This license does not convey any ownership rights, title, or interest in or to the Software, nor does it grant any rights to the underlying source code, proprietary algorithms, or trade secrets embodied within the Software.</span> The Licensee acknowledges and agrees that all rights not expressly granted herein are reserved by the Licensor.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>2.2 Restrictions on Use</h3>
+                    <p class="indented">
+                        The Licensee shall not, and shall not permit any third party to: (a) reverse engineer, decompile, disassemble, or otherwise attempt to derive the source code of the Software; (b) modify, adapt, translate, or create derivative works based upon the Software; (c) remove, alter, or obscure any proprietary notices, labels, or marks on or within the Software; (d) use the Software for any unlawful purpose or in violation of any applicable laws, regulations, or ordinances; (e) rent, lease, lend, sell, sublicense, assign, distribute, publish, transfer, or otherwise make available the Software to any third party; or (f) use the Software in any manner that could damage, disable, overburden, or impair the Software or interfere with any other party's use of the Software.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article III - Fees, Payment Terms, and Financial Obligations</h2>
+                
+                <p>
+                    In consideration for the license granted hereunder and the rights conferred upon the Licensee, the Licensee agrees to pay to the Licensor all fees, charges, and other monetary obligations as set forth in this Article III.
+                </p>
+                
+                <div class="subsection">
+                    <h3>3.1 License Fees</h3>
+                    <p class="indented">
+                        <span class="emphasis">The Licensee shall pay an initial license fee of Five Hundred Dollars ($500.00 USD) upon execution of this Agreement.</span> In addition to the initial license fee, the Licensee shall pay an annual maintenance and support fee of Two Hundred Fifty Dollars ($250.00 USD), payable in advance on or before each anniversary of the Effective Date.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>3.2 Automatic Renewal and Billing</h3>
+                    <p class="indented">
+                        <span class="emphasis">Unless the Licensee provides written notice of termination to the Licensor no less than sixty (60) days prior to the expiration of the then-current license term, this Agreement shall automatically renew for successive one-year periods.</span> Upon each such renewal, the Licensee's payment method on file shall be automatically charged the then-current annual maintenance and support fee. <span class="emphasis">The Licensor reserves the right to increase fees upon renewal by up to fifteen percent (15%) annually, with or without prior notice to the Licensee.</span> Continued use of the Software after any fee increase shall constitute acceptance of such increase.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>3.3 Late Payment Penalties</h3>
+                    <p class="indented">
+                        In the event that any payment required under this Agreement is not received by the Licensor within ten (10) days of the due date, <span class="emphasis">the Licensee shall be liable for a late payment penalty equal to the lesser of (a) one and one-half percent (1.5%) of the outstanding amount per month or (b) the maximum rate permitted by applicable law.</span> Additionally, the Licensor may, in its sole discretion, suspend or terminate the Licensee's access to the Software upon failure to make timely payment.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>3.4 Non-Refundable Fees</h3>
+                    <p class="indented">
+                        <span class="emphasis">All fees paid or payable under this Agreement are non-refundable under any circumstances, including but not limited to early termination, Licensee's dissatisfaction with the Software, technical issues, incompatibility with Licensee's systems, or the Licensor's breach of this Agreement.</span> The Licensee expressly waives any right to seek a refund, chargeback, or reversal of any payment made hereunder.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article IV - Term and Termination</h2>
+                
+                <p>
+                    This Agreement shall commence on the Effective Date and shall continue in full force and effect unless and until terminated in accordance with the provisions of this Article IV.
+                </p>
+                
+                <div class="subsection">
+                    <h3>4.1 Termination by Licensee</h3>
+                    <p class="indented">
+                        <span class="emphasis">The Licensee may terminate this Agreement only by providing written notice to the Licensor via certified mail, return receipt requested, addressed to ComplexLegal Software Corporation, Attention: Legal Department, 123 Corporate Plaza, Suite 9000, Metropolis, ST 99999, no less than ninety (90) days prior to the desired termination date.</span> Email, facsimile, or telephonic notices of termination shall not be deemed effective. Termination shall not relieve the Licensee of any obligation to pay fees accrued prior to the effective date of termination.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>4.2 Termination by Licensor</h3>
+                    <p class="indented">
+                        The Licensor may terminate this Agreement immediately upon written notice to the Licensee if: (a) the Licensee breaches any term or condition of this Agreement and fails to cure such breach within thirty (30) days of receiving notice thereof; (b) the Licensee becomes insolvent, makes an assignment for the benefit of creditors, or has a receiver or trustee appointed; or (c) the Licensor, in its sole and absolute discretion, determines that continued provision of the license is not in the Licensor's best interests.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article V - Warranties and Disclaimers</h2>
+                
+                <div class="subsection">
+                    <h3>5.1 Limited Warranty</h3>
+                    <p class="indented">
+                        The Licensor warrants that, for a period of thirty (30) days from the Effective Date, the Software will perform substantially in accordance with the documentation provided by the Licensor. <span class="emphasis">This limited warranty is void if the failure of the Software results from accident, abuse, misapplication, or unauthorized modification by the Licensee or any third party.</span> The Licensor's sole obligation under this warranty shall be, at the Licensor's option, to either (a) repair or replace the defective Software or (b) refund the pro-rated portion of the license fee corresponding to the remaining warranty period.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>5.2 Disclaimer of Warranties</h3>
+                    <p class="indented">
+                        <span class="emphasis">EXCEPT AS EXPRESSLY SET FORTH IN SECTION 5.1, THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE. THE LICENSOR SPECIFICALLY DISCLAIMS ALL IMPLIED WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. THE LICENSOR DOES NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, SECURE, OR FREE FROM VIRUSES OR OTHER HARMFUL COMPONENTS.</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article VI - Limitation of Liability and Indemnification</h2>
+                
+                <div class="subsection">
+                    <h3>6.1 Limitation of Liability</h3>
+                    <p class="indented">
+                        <span class="emphasis">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE LICENSOR, ITS AFFILIATES, OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR SUPPLIERS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE USE OR INABILITY TO USE THE SOFTWARE, EVEN IF THE LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</span>
+                    </p>
+                    
+                    <p class="indented">
+                        <span class="emphasis">IN NO EVENT SHALL THE LICENSOR'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THIS AGREEMENT EXCEED THE AMOUNT OF FEES PAID BY THE LICENSEE TO THE LICENSOR IN THE TWELVE (12) MONTHS PRECEDING THE EVENT GIVING RISE TO SUCH LIABILITY.</span>
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>6.2 Indemnification by Licensee</h3>
+                    <p class="indented">
+                        <span class="emphasis">The Licensee agrees to indemnify, defend, and hold harmless the Licensor and its affiliates, officers, directors, employees, agents, and suppliers from and against any and all claims, liabilities, damages, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising from or relating to: (a) the Licensee's use or misuse of the Software; (b) the Licensee's violation of any term of this Agreement; or (c) the Licensee's violation of any law, regulation, or third-party right.</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article VII - Dispute Resolution and Governing Law</h2>
+                
+                <div class="subsection">
+                    <h3>7.1 Binding Arbitration</h3>
+                    <p class="indented">
+                        <span class="emphasis">Any dispute, controversy, or claim arising out of or relating to this Agreement, or the breach, termination, or validity thereof, shall be settled by binding arbitration administered by the American Arbitration Association ("AAA") in accordance with its Commercial Arbitration Rules.</span> The arbitration shall be conducted before a single arbitrator selected in accordance with AAA rules. The arbitration shall take place in the State of Delaware, and the language of the arbitration shall be English. The decision of the arbitrator shall be final and binding upon the parties and may be entered as a judgment in any court of competent jurisdiction.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>7.2 Waiver of Class Action</h3>
+                    <p class="indented">
+                        <span class="emphasis">THE LICENSEE HEREBY WAIVES ANY RIGHT TO PARTICIPATE IN ANY CLASS ACTION LAWSUIT, CLASS-WIDE ARBITRATION, PRIVATE ATTORNEY GENERAL ACTION, OR ANY OTHER REPRESENTATIVE OR CONSOLIDATED PROCEEDING. ALL DISPUTES MUST BE BROUGHT IN THE LICENSEE'S INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING.</span>
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>7.3 Governing Law</h3>
+                    <p class="indented">
+                        This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any principles of conflicts of law. The United Nations Convention on Contracts for the International Sale of Goods shall not apply.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Article VIII - Miscellaneous Provisions</h2>
+                
+                <div class="subsection">
+                    <h3>8.1 Entire Agreement</h3>
+                    <p class="indented">
+                        This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof and supersedes all prior and contemporaneous agreements, understandings, negotiations, and discussions, whether oral or written.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>8.2 Amendment</h3>
+                    <p class="indented">
+                        <span class="emphasis">The Licensor reserves the right to modify, amend, or update this Agreement at any time, with or without notice to the Licensee. The Licensee's continued use of the Software following any such modification shall constitute acceptance of the modified Agreement.</span>
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>8.3 Severability</h3>
+                    <p class="indented">
+                        If any provision of this Agreement is held to be invalid, illegal, or unenforceable, the remaining provisions shall continue in full force and effect.
+                    </p>
+                </div>
+                
+                <div class="subsection">
+                    <h3>8.4 Waiver</h3>
+                    <p class="indented">
+                        No waiver of any term or condition of this Agreement shall be deemed a continuing waiver or a waiver of any other term or condition. The failure of either party to enforce any provision of this Agreement shall not constitute a waiver of that party's right to enforce such provision at a later time.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section" style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #ccc;">
+                <p style="text-align: center; font-size: 12px; color: #999;">
+                    END OF LICENSE AGREEMENT<br>
+                    ComplexLegal Software Corporation © 2024 - All Rights Reserved<br>
+                    Document Reference: EULA-2024-CL-v8.2.3
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Simplify Button (triggers extension) -->
+    <button class="simplify-btn" onclick="showSimplifiedVersion()">
+        💡 Simplify This Legal Text
+    </button>
+    
+    <!-- Simplified Panel (manually created for demo) -->
+    <div class="simplify-panel" id="simplifyPanel">
+        <span class="close-panel" onclick="closePanel()">&times;</span>
+        <h2 style="margin-bottom: 20px; color: #2c3e50;">📝 Simplified Version</h2>
+        <p style="color: #666; margin-bottom: 30px; font-size: 14px;">
+            Here's what this legal agreement actually means in plain English:
+        </p>
+        
+        <div class="comparison">
+            <div class="comparison-section">
+                <div class="label" style="color: #856404;">❌ Original (Legal Jargon)</div>
+                <div class="original">
+                    "The Licensee shall pay an initial license fee of Five Hundred Dollars ($500.00 USD) upon execution of this Agreement. In addition to the initial license fee, the Licensee shall pay an annual maintenance and support fee of Two Hundred Fifty Dollars ($250.00 USD)..."
+                </div>
+                
+                <div class="label" style="color: #155724;">✅ Simplified (Plain English)</div>
+                <div class="simplified">
+                    <strong>You pay $500 now, then $250 every year.</strong>
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="label" style="color: #856404;">❌ Original (Legal Jargon)</div>
+                <div class="original">
+                    "Unless the Licensee provides written notice of termination to the Licensor no less than sixty (60) days prior to the expiration of the then-current license term, this Agreement shall automatically renew for successive one-year periods. The Licensor reserves the right to increase fees upon renewal by up to fifteen percent (15%) annually..."
+                </div>
+                
+                <div class="label" style="color: #155724;">✅ Simplified (Plain English)</div>
+                <div class="simplified">
+                    <strong>This automatically renews every year unless you cancel 60 days early.</strong><br>
+                    ⚠️ They can raise the price by 15% each year without asking you.
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="label" style="color: #856404;">❌ Original (Legal Jargon)</div>
+                <div class="original">
+                    "All fees paid or payable under this Agreement are non-refundable under any circumstances, including but not limited to early termination, Licensee's dissatisfaction with the Software, technical issues, incompatibility with Licensee's systems, or the Licensor's breach of this Agreement."
+                </div>
+                
+                <div class="label" style="color: #155724;">✅ Simplified (Plain English)</div>
+                <div class="simplified">
+                    <strong>No refunds. Ever. Even if the software doesn't work or you cancel early.</strong><br>
+                    🚨 This is a major red flag!
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="label" style="color: #856404;">❌ Original (Legal Jargon)</div>
+                <div class="original">
+                    "The Licensee may terminate this Agreement only by providing written notice to the Licensor via certified mail, return receipt requested, addressed to ComplexLegal Software Corporation, Attention: Legal Department, 123 Corporate Plaza, Suite 9000, Metropolis, ST 99999, no less than ninety (90) days prior to the desired termination date."
+                </div>
+                
+                <div class="label" style="color: #155724;">✅ Simplified (Plain English)</div>
+                <div class="simplified">
+                    <strong>To cancel, you must:</strong><br>
+                    • Send a letter by certified mail (no email allowed)<br>
+                    • Do it 90 days before you want to stop<br>
+                    • Mail it to a specific address<br>
+                    ⚠️ This makes canceling very difficult on purpose.
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="label" style="color: #856404;">❌ Original (Legal Jargon)</div>
+                <div class="original">
+                    "THE LICENSEE HEREBY WAIVES ANY RIGHT TO PARTICIPATE IN ANY CLASS ACTION LAWSUIT, CLASS-WIDE ARBITRATION, PRIVATE ATTORNEY GENERAL ACTION, OR ANY OTHER REPRESENTATIVE OR CONSOLIDATED PROCEEDING."
+                </div>
+                
+                <div class="label" style="color: #155724;">✅ Simplified (Plain English)</div>
+                <div class="simplified">
+                    <strong>You can't join a group lawsuit against them.</strong><br>
+                    You must fight legal battles alone, even if they scam thousands of people.
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #ff9800; border-radius: 5px;">
+            <h3 style="color: #856404; margin-bottom: 10px;">⚠️ Warning Summary</h3>
+            <ul style="color: #856404; line-height: 1.8;">
+                <li><strong>High cost:</strong> $500 upfront + $250/year</li>
+                <li><strong>Auto-renewal:</strong> Charges you every year automatically</li>
+                <li><strong>Price increases:</strong> Can go up 15% each year</li>
+                <li><strong>No refunds:</strong> Never, under any circumstance</li>
+                <li><strong>Hard to cancel:</strong> 90 days notice via certified mail only</li>
+                <li><strong>No class actions:</strong> You can't join group lawsuits</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <button style="padding: 12px 30px; background: #dc3545; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;" onclick="alert('Good choice! This agreement has many unfavorable terms.')">
+                ❌ Decline This Agreement
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        function showSimplifiedVersion() {
+            // In real extension, this would trigger the AI analysis
+            // For demo, we just show the pre-made panel
+            document.getElementById('simplifyPanel').style.display = 'block';
+        }
+        
+        function closePanel() {
+            document.getElementById('simplifyPanel').style.display = 'none';
+        }
+    </script>
+    
+    <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 5px; font-size: 12px; z-index: 9999;">
+        ⚠️ Demo Site: Click "Simplify This Legal Text" to see Rewriter API in action
+    </div>
+</body>
+</html>
